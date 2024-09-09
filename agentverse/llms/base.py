@@ -1,6 +1,5 @@
 from abc import abstractmethod
-from typing import Dict, Any
-
+from typing import Any, Dict, Optional
 from pydantic import BaseModel, Field
 
 
@@ -20,6 +19,15 @@ class BaseModelArgs(BaseModel):
 class BaseLLM(BaseModel):
     args: BaseModelArgs = Field(default_factory=BaseModelArgs)
     max_retry: int = Field(default=3)
+    client_args: Optional[Dict] = Field(default={})
+    is_azure: bool = Field(default=False)
+
+    @abstractmethod
+    def get_spend(self) -> float:
+        """
+        Number of USD spent
+        """
+        return -1.0
 
     @abstractmethod
     def generate_response(self, **kwargs) -> LLMResult:

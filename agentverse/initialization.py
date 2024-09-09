@@ -4,12 +4,14 @@ import os
 from typing import Dict, List, TYPE_CHECKING
 
 import yaml
+from agentverse.logging import logger
 
-# try:
-#     from bmtools.agent.singletool import import_all_apis, load_single_tools
-# except:
-#     print("BMTools is not installed, tools cannot be used. To install BMTools, \
-#          please follow the instruction in the README.md file.")
+try:
+    from bmtools.agent.singletool import import_all_apis, load_single_tools
+except:
+    logger.warn(
+        "BMTools is not installed, tools in the simulation environment cannot be used. To install BMTools, please follow the instruction in the README.md file. If you aren't running a *simulation* case with tool, you can ignore this warning."
+    )
 
 from agentverse.llms import llm_registry
 
@@ -18,7 +20,7 @@ from agentverse.environments import BaseEnvironment, env_registry
 from agentverse.memory import memory_registry
 from agentverse.memory_manipulator import memory_manipulator_registry
 
-from agentverse.parser import output_parser_registry
+from agentverse.output_parser import output_parser_registry
 
 if TYPE_CHECKING:
     from agentverse.agents import BaseAgent
@@ -34,19 +36,24 @@ def load_memory(memory_config: Dict):
     memory_type = memory_config.pop("memory_type", "chat_history")
     return memory_registry.build(memory_type, **memory_config)
 
+
 def load_memory_manipulator(memory_manipulator_config: Dict):
-    memory_manipulator_type = memory_manipulator_config.pop("memory_manipulator_type", "basic")
-    return memory_manipulator_registry.build(memory_manipulator_type, **memory_manipulator_config)
+    memory_manipulator_type = memory_manipulator_config.pop(
+        "memory_manipulator_type", "basic"
+    )
+    return memory_manipulator_registry.build(
+        memory_manipulator_type, **memory_manipulator_config
+    )
 
 
-# def load_tools(tool_config: List[Dict]):
-#     if len(tool_config) == 0:
-#         return []
-#     all_tools_list = []
-#     for tool in tool_config:
-#         _, config = load_single_tools(tool["tool_name"], tool["tool_url"])
-#         all_tools_list += import_all_apis(config)
-#     return all_tools_list
+def load_tools(tool_config: List[Dict]):
+    if len(tool_config) == 0:
+        return []
+    all_tools_list = []
+    for tool in tool_config:
+        _, config = load_single_tools(tool["tool_name"], tool["tool_url"])
+        all_tools_list += import_all_apis(config)
+    return all_tools_list
 
 
 def load_environment(env_config: Dict) -> BaseEnvironment:
@@ -60,9 +67,9 @@ def load_agent(agent_config: Dict) -> BaseAgent:
     return agent
 
 
-def prepare_task_config(task):
+def prepare_task_config(task, tasks_dir):
     """Read the yaml config of the given task in `tasks` directory."""
-    all_task_dir = os.path.join(os.path.dirname(__file__), "tasks")
+    all_task_dir = tasks_dir
     task_path = os.path.join(all_task_dir, task)
     config_path = os.path.join(task_path, "config.yaml")
     if not os.path.exists(task_path):
@@ -93,10 +100,12 @@ def prepare_task_config(task):
         llm = load_llm(agent_configs.get("llm", "text-davinci-003"))
         agent_configs["llm"] = llm
 
-        memory_manipulator = load_memory_manipulator(agent_configs.get("memory_manipulator", {}))
+        memory_manipulator = load_memory_manipulator(
+            agent_configs.get("memory_manipulator", {})
+        )
         agent_configs["memory_manipulator"] = memory_manipulator
 
-        # agent_configs["tools"] = load_tools(agent_configs.get("tools", []))
+        agent_configs["tools"] = load_tools(agent_configs.get("tools", []))
 
         # Build the output parser
         output_parser_config = agent_configs.get("output_parser", {"type": "dummy"})

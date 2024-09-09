@@ -77,13 +77,15 @@ agents:
     memory: 
       memory_type: vectorstore
     memory_manipulator:
-      memory_manipulator_type: reflection
+      memory_manipulator_type: plan
     prompt_template: *prompt
     llm:
       model: "gpt-4"
       llm_type: gpt-4
       temperature: 0.3
       max_tokens: 128
+    output_parser:
+      type: alice_home
     current_time: "2023-04-01 07:00:00"
   -
     agent_type: reflection
@@ -120,6 +122,8 @@ agents:
       llm_type: gpt-4
       temperature: 0.3
       max_tokens: 128
+    output_parser:
+      type: alice_home
     current_time: "2023-04-01 07:00:00"
 
 tools: ~

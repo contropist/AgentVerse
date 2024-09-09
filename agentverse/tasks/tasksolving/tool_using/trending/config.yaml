@@ -2,7 +2,7 @@ cnt_agents: &cnt_agents 4
 cnt_tool_agents: &cnt_tool_agents 3
 max_rounds: &max_rounds 5
 max_criticizing_rounds: 3
-tool_config: &tool_config tools_simplified.json
+tool_config: &tool_config agentverse/tasks/tasksolving/tool_using/tools_simplified.json
 
 task_description: I'm currently analyzing what is popular on the website. Can you help me find the recent trending stuff. It could be anything, like trending news, products, books, movies, music, etc. Give a summarization for me.
 
@@ -153,7 +153,7 @@ agents:
       temperature: 0
       max_tokens: 512
     output_parser:
-      type: role_description_name_assigner
+      type: role-description-name-assigner
 
   - #solver_agent:
     agent_type: solver

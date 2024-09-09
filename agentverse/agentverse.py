@@ -3,7 +3,7 @@ import logging
 from typing import List
 
 # from agentverse.agents import Agent
-from agentverse.agents.conversation_agent import BaseAgent
+from agentverse.agents.base import BaseAgent
 from agentverse.environments import BaseEnvironment
 from agentverse.initialization import load_agent, load_environment, prepare_task_config
 
@@ -23,13 +23,13 @@ class AgentVerse:
         self.environment = environment
 
     @classmethod
-    def from_task(cls, task: str):
+    def from_task(cls, task: str, tasks_dir: str):
         """Build an AgentVerse from a task name.
         The task name should correspond to a directory in `tasks` directory.
         Then this method will load the configuration from the yaml file in that directory.
         """
         # Prepare the config of the task
-        task_config = prepare_task_config(task)
+        task_config = prepare_task_config(task, tasks_dir)
 
         # Build the agents
         agents = []

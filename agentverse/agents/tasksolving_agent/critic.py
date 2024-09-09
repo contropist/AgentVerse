@@ -38,13 +38,13 @@ class CriticAgent(BaseAgent):
                 tool_descriptions = "\n".join(
                     [f"- {t['name']}: " + t["description"] for t in tools]
                 )
+                kwargs.update({"tools": tools})
+                kwargs.update({"tool_names": tool_names})
+                kwargs.update({"tool_descriptions": tool_descriptions})
             except Exception as e:
                 logger.error(e)
                 logger.warn("Failed to load tool config file.")
         super().__init__(
-            tools=tools,
-            tool_names=tool_names,
-            tool_descriptions=tool_descriptions,
             *args,
             **kwargs,
         )
@@ -62,7 +62,7 @@ class CriticAgent(BaseAgent):
     ) -> CriticMessage:
         """Asynchronous version of step"""
         logger.debug("", self.name, Fore.MAGENTA)
-        prepend_prompt, append_prompt = self.get_all_prompts(
+        prepend_prompt, append_prompt, prompt_token = self.get_all_prompts(
             preliminary_solution=preliminary_solution,
             advice=advice,
             task_description=task_description,
@@ -72,7 +72,16 @@ class CriticAgent(BaseAgent):
             # tool_names=self.tool_names,
             tool_descriptions=self.tool_descriptions,
         )
-        history = self.memory.to_messages(self.name, start_index=-self.max_history)
+
+        max_send_token = self.llm.send_token_limit(self.llm.args.model)
+        max_send_token -= prompt_token
+
+        history = await self.memory.to_messages(
+            self.name,
+            start_index=-self.max_history,
+            max_send_token=max_send_token,
+            model=self.llm.args.model,
+        )
         parsed_response: Union[AgentCriticism, None] = None
         for i in range(self.max_retry):
             try:

@@ -1,15 +1,35 @@
 <h1 align="center"> 🤖 AgentVerse 🪐 </h1>
 
+<!--
 <h3 align="center">
     <p>A Framework for Multi-LLM Environment Simulation</p>
 </h3>
+-->
+
 <p align="center">
     <a href="https://github.com/OpenBMB/AgentVerse/blob/main/LICENSE">
         <img alt="License: Apache2" src="https://img.shields.io/badge/License-Apache_2.0-green.svg">
     </a>
     <a href="https://www.python.org/downloads/release/python-3916/">
-        <img alt="Documentation" src="https://img.shields.io/badge/python-3.9+-blue.svg">
+        <img alt="Python Version" src="https://img.shields.io/badge/python-3.9+-blue.svg">
     </a>
+    <a href="https://github.com/OpenBMB/AgentVerse/actions/">
+        <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/OpenBMB/AgentVerse/test.yml">
+    </a>
+    <a href="https://github.com/psf/black">
+        <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-black">
+<!--     </a>
+    <a href="https://github.com/OpenBMB/AgentVerse/issues">
+        <img alt="Contributions: Welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat">
+    </a> -->
+    <a href="https://huggingface.co/AgentVerse">
+        <img alt="HuggingFace" src="https://img.shields.io/badge/hugging_face-play-yellow">
+    </a>
+    <a href="https://discord.gg/gDAXfjMw">
+        <img alt="Discord" src="https://img.shields.io/badge/AgentVerse-Discord-purple?style=flat">
+    </a>
+    
+    
 </p>
 
 <p align="center">
@@ -17,69 +37,70 @@
 </p>
 
 <p align="center">
-    【English | <a href="README_zh.md">Chinese</a>】
+    【<a href="https://arxiv.org/abs/2308.10848">Paper</a>】 
 </p>
 
-**AgentVerse** offers a versatile framework that streamlines the process of creating custom multi-agent environments for large language models (LLMs). Designed to facilitate swift development and customization with minimal effort, our framework empowers researchers to concentrate on their research, rather than being bogged down by implementation details.
+<p align="center">
+    【English | <a href="README_zh.md">Chinese</a>】 
+</p>
 
-⚠️⚠️⚠️ We're presently in the process of refactoring our code to offer you the flexibility to construct both simulation environments (without a predefined goal) and task-solving environments (with a specific goal). Please note that our README is currently outdated, we will update it very soon. If you require a stable version of our code that exclusively supports simulation environments, you can find it in our [`release-1.0`](https://github.com/OpenBMB/AgentVerse/tree/release-1.0) branch.
+**AgentVerse** is designed to facilitate the deployment of multiple LLM-based agents in various applications. AgentVerse primarily provides two frameworks: **task-solving** and **simulation**. 
+
+- Task-solving: This framework assembles multiple agents as an automatic multi-agent system ([AgentVerse-Tasksolving](https://arxiv.org/pdf/2308.10848.pdf), [Multi-agent as system](https://arxiv.org/abs/2309.02427)) to collaboratively accomplish the corresponding tasks. 
+Applications: software development system, consulting system, etc. 
+
+<p align="center">
+<img width="616" alt="Screen Shot 2023-09-01 at 12 08 57 PM" src="https://github.com/OpenBMB/AgentVerse/assets/11704492/6db1c907-b7fc-42f9-946c-89853a28f386">
+</p>
+
+- Simulation: This framework allows users to set up custom environments to observe behaviors among, or interact with, multiple agents. ⚠️⚠️⚠️ We're refactoring the code. If you require a stable version that exclusively supports simulation framework, you can use [`release-0.1`](https://github.com/OpenBMB/AgentVerse/tree/release-0.1) branch. Applications: game, social behavior research of LLM-based agents, etc.
+
+<p align="center">
+<img width="616" alt="Screen Shot 2023-10-16 at 10 53 49 PM" src="https://github.com/OpenBMB/AgentVerse/assets/11704492/4102d1e2-3fe7-4656-aa2c-a218ce1f2c95">
+</p>
+
 
 ---
 
-## ✨ Features
 
-- 🥳 **Efficient Environment Building:** Our framework provides a collection of essential building blocks for effortlessly creating a multi-agent environment. With only a few lines in a configuration file, you can easily construct basic environments such as a chat room for LLMs. This process entails defining the environment's settings and prompts for LLMs, enabling researchers like you to concentrate on experimentation and analysis.
+# 📰 What's New
+- [2024/3/17] AgentVerse was introduced in NVIDIA's blog - [Building Your First LLM Agent Application](https://developer.nvidia.com/blog/building-your-first-llm-agent-application/). 
 
-- ⚙️ **Customizable Components**: AgentVerse simplifies the multi-agent environment by dividing it into five functional modules and defining their respective interfaces. For complex environments that cannot be constructed directly using the basic modules offered in AgentVerse, you can customize one or more of the interfaces within these five functional modules to efficiently create your own multi-agent environment according to your requirements.
+- [2024/1/17] We're super excited to announce that our paper got accepted at ICLR 2024. More updates will be coming soon!
+  
+- [2023/10/17] We're super excited to share our open-source AI community hugging face: [`AgentVerse`](https://huggingface.co/spaces/AgentVerse/agentVerse). You are able to try out the two simulation applications, NLP Classroom and Prisoner's Dilemma,with your code of the openai API key and the openai organization. Have fun!
 
-- 🛠 **Tools (Plugins) Utilization**: AgentVerse supports the multi-agent environments with tools. Currently, AgentVerse supports tools provided in [BMTools](https://github.com/OpenBMB/BMTools). 
+- [2023/10/5] Re-factor our codebase to enable the deployment of both simulation and task-solving framework! We have placed the code for Minecraft example in the paper at the [`minecraft`](https://github.com/OpenBMB/AgentVerse/tree/minecraft) branch. Our tool-using example will soon be updated to the `main` branch. Stay tuned!
 
-## 📰 What's New
-- [2023/8/22] 📝 We're excited to share our work-in-progress paper [AgentVerse: Facilitating Multi-Agent Collaboration and Exploring Emergent Behaviors in Agents](https://arxiv.org/abs/2308.10848) related to this repository.
-<img width="616" alt="Screen Shot 2023-09-01 at 12 08 57 PM" src="https://github.com/OpenBMB/AgentVerse/assets/11704492/6db1c907-b7fc-42f9-946c-89853a28f386">
+- [2023/8/22] We're excited to share our paper [AgentVerse: Facilitating Multi-Agent Collaboration and Exploring Emergent Behaviors in Agents](https://arxiv.org/abs/2308.10848) that  illustrate the task-solving framework 
+in detail of AgentVerse.
 
-You could refer the stay-tuned code in this [branch](https://github.com/OpenBMB/AgentVerse/tree/AgentVerse-TaskSolving).
-
-- [2023/6/5] 🎉 We are thrilled to present an array of [demos](#-simple-demo-video), including [NLP Classroom](#nlp-classroom), [Prisoner Dilemma](#prisoner-dilemma), [Software Design](#software-design), [Database Administrator](#database-administrator-dba), and a simple [H5 Pokemon Game](#pokemon) that enables the interaction with the characters in Pokemon! Try out these demos and have fun!
+- [2023/6/5] We are thrilled to present an array of [demos](#-simple-demo-video), including [NLP Classroom](#nlp-classroom), [Prisoner Dilemma](#prisoner-dilemma), [Software Design](#software-design), [Database Administrator](#database-administrator-dba), and a simple [H5 Pokemon Game](#pokemon) that enables the interaction with the characters in Pokemon! Try out these demos and have fun!
 - [2023/5/1] 🚀 [AgentVerse](https://github.com/OpenBMB/AgentVerse) is officially launched!
 
-## 🌟 Join Us!
-AgentVerse is on a mission to revolutionize the multi-agent environment for large language models, and we're eagerly looking for passionate collaborators to join us on this exciting journey.
-### How Can You Contribute?
-- **Code Development**: If you're an engineer, help us refine, optimize, and expand the current framework. We're always looking for talented developers to enhance our existing features and develop new modules.
 
-- **Documentation and Tutorials**: If you have a knack for writing, help us improve our documentation, create tutorials, or write blog posts to make AgentVerse more accessible to the broader community.
 
-- **Application Exploration**: If you're intrigued by multi-agent applications and are eager to experiment using AgentVerse, we'd be thrilled to support your journey and see what you create!
 
-- **Feedback and Suggestions**: Use AgentVerse and provide us with feedback. Your insights can lead to potential improvements and ensure that our framework remains top-notch.
-
-Also, if you're passionate about advancing the frontiers of multi-agent environments and are eager to dive deeper into research, we invite you to join our team at THUNLP. To explore this exciting opportunity and embark on a collaborative journey with us, please reach out to [chenweize1998@gmail.com](chenweize1998@gmail.com) and [yushengsu.thu@gmail.com](yushengsu.thu@gmail.com) and express your interest. We're keen to welcome motivated individuals like you to our lab!
-
-## 🗓 Coming Soon
-- [ ] Code release of our [paper](https://arxiv.org/abs/2308.10848)
+# 🗓 Coming Soon
+- [x] Code release of our [paper](https://arxiv.org/abs/2308.10848)
+- [x] Add support for local LLM (LLaMA, Vicunna, etc.)
 - [ ] Add documentation
 - [ ] Support more sophisticated memory for conversation history
-- [ ] Add support for local LLM
-- [ ] Auto-generate UI based on the given multi-agent environment
 
+
+<!--
 
 ## 👾 Simple Demo Video
 
 We demonstrate the following cases that are expertly crafted by AgentVerse.
-<!--
-### [![Demo video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/9JCVfzMFhaM)
--->
-<!--![image](imgs/multiagent-min.gif)-->
 
-<!-- - **NLP Classroom**: -->
 
 #### NLP Classroom
 In the NLP class, the professor and students engage in interactive communication. When students have a question, they raise their hands and patiently wait for the professor to call on them. Only after being called on by the professor, can students speak and ask their questions.
 
 Use the following command to launch the NLP Classroom example:
 ```bash
-python main_demo.py --task nlp_classroom_9players
+python agentverse_command/main_simulation_gui.py --task simulation/nlp_classroom_9players
 ```
 
 https://github.com/OpenBMB/AgentVerse/assets/11704492/6ea07850-595e-4a28-a82e-f863011353c2
@@ -90,7 +111,7 @@ A prisoner's Dilemma is a thought experiment that challenges two completely rati
 
 Use the following command to launch the Prisoner Dilemma example:
 ```bash
-python main_demo.py --task prisoner_dilemma
+python agentverse_command/main_simulation_gui.py --task simulation/prisoner_dilemma
 ```
 
 https://github.com/OpenBMB/AgentVerse/assets/11704492/017c46e5-c738-4fca-9352-b008e2d518bd
@@ -101,7 +122,7 @@ In the Software Design example, a code writer, a code tester and a code reviewer
 
 Use the following command to launch the Software Design example:
 ```bash
-python main_demo.py --task sde_team/sde_team_2players
+python agentverse_command/main_simulation_gui.py --task simulation/sde_team/sde_team_2players
 ```
 
 https://github.com/OpenBMB/AgentVerse/assets/11704492/5058066a-abee-490d-8659-b4e54661626a
@@ -112,7 +133,7 @@ https://github.com/OpenBMB/AgentVerse/assets/11704492/5058066a-abee-490d-8659-b4
 In the database diagnosis scenario, the Chief DBA monitors the system anomalies (e.g., slow queries, locks, crash down). If detected, the domain experts are alerted to analyze root causes, share insights, and suggest optimization solutions together. The Chief DBA then provides a summarized report to the user.
 
 ```bash
-python main_demo.py --task db_diag
+python agentverse_command/main_simulation_gui.py --task simulation/db_diag
 ```
 
 https://github.com/OpenBMB/AgentVerse/assets/11704492/c633419d-afbb-47d4-bb12-6bb512e7af3a
@@ -124,7 +145,7 @@ In the context of the text evaluation scenario, we recommend users explore the [
 https://github.com/OpenBMB/AgentVerse/assets/75533759/58f33468-f15b-4bac-ae01-8d0780019f85
 
 #### Pokemon
-In the game, agents can visit shops, train their Pokémon at the gym, and interact with one another. As a player, you take on the role of an agent and can engage with others at any time. There are 6 characters in the Pokémon environment who appeared in Pokemon Emerald: [May](https://bulbapedia.bulbagarden.net/wiki/May_(game)), [Professor Birch](https://bulbapedia.bulbagarden.net/wiki/Professor_Birch), [Steven Stone](https://bulbapedia.bulbagarden.net/wiki/Steven_Stone), [Maxie](https://bulbapedia.bulbagarden.net/wiki/Maxie), [Archie](https://bulbapedia.bulbagarden.net/wiki/Archie) and [Joseph](https://bulbapedia.bulbagarden.net/wiki/Mr._Stone). 
+**Currently available only in [`release-0.1`](https://github.com/OpenBMB/AgentVerse/tree/release-0.1)**. In the game, agents can walk around the game world, and interact with one another. As a player, you take on the role of an agent and can engage with others at any time. There are 6 characters in the Pokémon environment who appeared in Pokemon Emerald: [May](https://bulbapedia.bulbagarden.net/wiki/May_(game)), [Professor Birch](https://bulbapedia.bulbagarden.net/wiki/Professor_Birch), [Steven Stone](https://bulbapedia.bulbagarden.net/wiki/Steven_Stone), [Maxie](https://bulbapedia.bulbagarden.net/wiki/Maxie), [Archie](https://bulbapedia.bulbagarden.net/wiki/Archie) and [Joseph](https://bulbapedia.bulbagarden.net/wiki/Mr._Stone). 
 
 To launch the Pokemon game, first launch a local server with the following command:
 ```bash
@@ -143,7 +164,9 @@ Wait for the compilation to complete, and have fun! (WASD for moving around, and
 
 https://github.com/OpenBMB/AgentVerse/assets/11704492/4d07da68-f942-4205-b558-f155e95782e7
 
+-->
 
+<!--
 
 ## Contents
 
@@ -162,8 +185,8 @@ https://github.com/OpenBMB/AgentVerse/assets/11704492/4d07da68-f942-4205-b558-f1
 - [Contents](#contents)
 - [🚀 Getting Started](#-getting-started)
   - [Installation](#installation)
-  - [CLI Example](#cli-example)
-  - [Local Website Demo](#local-website-demo)
+  - [Simulation Example](#simulation)
+  - [Task-Solving Example](#task-solving-cli-example)
 - [💡 Philosophy](#-philosophy)
   - [Environment](#environment)
   - [Agent](#agent)
@@ -178,65 +201,211 @@ https://github.com/OpenBMB/AgentVerse/assets/11704492/4d07da68-f942-4205-b558-f1
 - [Citation](#citation)
 - [Contact](#contact)
 
+-->
+
+# Contents
+- [📰 What's New](#-whats-new)
+- [🗓 Coming Soon](#-coming-soon)
+- [Contents](#contents)
+- [🚀 Getting Started](#-getting-started)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+  - [Simulation](#simulation)
+    - [Framework Required Modules](#framework-required-modules)
+    - [CLI Example](#cli-example)
+    - [GUI Example](#gui-example)
+  - [Task-Solving](#task-solving)
+    - [Framework Required Modules](#framework-required-modules-1)
+    - [CLI Example](#cli-example-1)
+  - [Local Model Support](#local-model-support)
+  - [vLLM Support](#vllm-support)
+  - [FSChat Support](#fschat-support)
+    - [1. Install the Additional Dependencies](#1-install-the-additional-dependencies)
+    - [2. Launch the Local Server](#2-launch-the-local-server)
+    - [3. Modify the Config File](#3-modify-the-config-file)
+- [AgentVerse Showcases](#agentverse-showcases)
+  - [Simulation Showcases](#simulation-showcases)
+  - [Task-Solving Showcases](#task-solving-showcases)
+- [🌟 Join Us!](#-join-us)
+  - [Leaders](#leaders)
+  - [Contributors](#contributors)
+  - [How Can You Contribute?](#how-can-you-contribute)
+  - [Social Media and Community](#social-media-and-community)
+- [Star History](#star-history)
+  - [Citation](#citation)
+- [Contact](#contact)
 
 
-## 🚀 Getting Started
 
-### Installation
 
-```bash
-pip install -U agentverse
-```
-Or you can install the package by manually cloning the latest repository
+# 🚀 Getting Started
+
+## Installation
+
+
+**Manually Install (Recommended!)**
+
+**Make sure you have Python >= 3.9**
 ```bash
 git clone https://github.com/OpenBMB/AgentVerse.git --depth 1
 cd AgentVerse
-pip install -r requirements.txt
+pip install -e .
 ```
-Some users have reported problems installing the `orjson` required by `gradio`. One simple workaround is to install it with Anaconda `conda install -c conda-forge orjson`.
 
-You also need to export your OpenAI API key as follows
+If you want to use AgentVerse with local models such as LLaMA, you need to additionally install some other dependencies:
+```bash
+pip install -r requirements_local.txt
+```
+
+**Install with pip**
+
+Or you can install through pip
+```bash
+pip install -U agentverse
+```
+
+## Environment Variables
+You need to export your OpenAI API key as follows：
 ```bash
 # Export your OpenAI API key
 export OPENAI_API_KEY="your_api_key_here"
 ```
 
-If you want to use the tools provided by BMTools, you need to install BMTools as follows:
+If you want use Azure OpenAI services, please export your Azure OpenAI key and OpenAI API base as follows：
 ```bash
-git clone git+https://github.com/OpenBMB/BMTools.git
-cd BMTools
-pip install -r requirements.txt
-python setup.py develop
+export AZURE_OPENAI_API_KEY="your_api_key_here"
+export AZURE_OPENAI_API_BASE="your_api_base_here"
 ```
 
+## Simulation
 
-<!--
-# Install BMTools
-cd ../
-git clone git@github.com:OpenBMB/BMTools.git
-cd BMTools
-python setup.py develop
--->
+### Framework Required Modules 
+```
+- agentverse 
+  - agents
+    - simulation_agent
+  - environments
+    - simulation_env
+```
 
 ### CLI Example
 
 You can create a multi-agent environments provided by us. Using the classroom scenario as an example. In this scenario, there are nine agents, one playing the role of a professor and the other eight as students.
 
 ```shell
-python3 main.py --task nlp_classroom_9players
+agentverse-simulation --task simulation/nlp_classroom_9players
 ```
 
-### Local Website Demo
+### GUI Example
 
 We also provide a local website demo for this environment. You can launch it with
 
 ```shell
-python3 main_demo.py --task nlp_classroom_9players
+agentverse-simulation-gui --task simulation/nlp_classroom_9players
 ```
 After successfully launching the local server, you can visit [http://127.0.0.1:7860/](http://127.0.0.1:7860/) to view the classroom environment.
 
+If you want to run the simulation cases with tools (e.g., simulation/nlp_classroom_3players_withtool), you need to install BMTools as follows:
+```bash
+git clone git+https://github.com/OpenBMB/BMTools.git
+cd BMTools
+pip install -r requirements.txt
+python setup.py develop
+```
+This is optional. If you do not install BMTools, the simulation cases without tools can still run normally.
+
+## Task-Solving 
 
 
+### Framework Required Modules 
+```
+- agentverse 
+  - agents
+    - simulation_env
+  - environments
+    - tasksolving_env
+```
+
+### CLI Example
+
+To run the experiments with the task-solving environment proposed in our [paper](https://arxiv.org/abs/2308.10848), you can use the following command:
+
+To run AgentVerse on a benchmark dataset, you can try
+```shell
+# Run the Humaneval benchmark using gpt-3.5-turbo (config file `agentverse/tasks/tasksolving/humaneval/gpt-3.5/config.yaml`)
+agentverse-benchmark --task tasksolving/humaneval/gpt-3.5 --dataset_path data/humaneval/test.jsonl --overwrite
+```
+
+To run AgentVerse on a specific problem, you can try
+```shell
+# Run a single query (config file `agentverse/tasks/tasksolving/brainstorming/gpt-3.5/config.yaml`). The task is specified in the config file.
+agentverse-tasksolving --task tasksolving/brainstorming
+```
+
+To run the tool using cases presented in our paper, i.e., multi-agent using tools such as web browser, Jupyter notebook, bing search, etc., you can first build ToolsServer provided by [XAgent](https://github.com/OpenBMB/XAgent). You can follow their [instruction](https://github.com/OpenBMB/XAgent#%EF%B8%8F-build-and-setup-toolserver) to build and run the ToolServer.
+
+After building and launching the ToolServer, you can use the following command to run the task-solving cases with tools:
+```shell
+agentverse-tasksolving --task tasksolving/tool_using/24point
+```
+We have provided more tasks in `agentverse/tasks/tasksolving/tool_using/` that show how multi-agent can use tools to solve problems.
+
+Also, you can take a look at `agentverse/tasks/tasksolving` for more experiments we have done in our paper.
+
+## Local Model Support
+## vLLM Support
+If you want to use vLLM, follow the guide [here](https://docs.vllm.ai/en/latest/getting_started/quickstart.html) to install and setup the vLLM server which is used to handle larger inference workloads. Create the following environment variables to connect to the vLLM server:
+```bash
+export VLLM_API_KEY="your_api_key_here"
+export VLLM_API_BASE="http://your_vllm_url_here"
+```
+
+Then modify the `model` in the task config file so that it matches the model name in the vLLM server. For example:
+```yaml
+model_type: vllm
+model: llama-2-7b-chat-hf
+```
+
+## FSChat Support
+This section provides a step-by-step guide to integrate FSChat into AgentVerse. FSChat is a framework that supports local models such as LLaMA, Vicunna, etc. running on your local machine.
+### 1. Install the Additional Dependencies
+If you want to use local models such as LLaMA, you need to additionally install some other dependencies:
+```bash
+pip install -r requirements_local.txt
+```
+
+### 2. Launch the Local Server
+Then modify the `MODEL_PATH` and `MODEL_NAME` according to your need to launch the local server with the following command:
+```bash
+bash scripts/run_local_model_server.sh
+```
+The script will launch a service for Llama 7B chat model.
+The `MODEL_NAME` in AgentVerse currently supports several models including `llama-2-7b-chat-hf`, `llama-2-13b-chat-hf`, `llama-2-70b-chat-hf`, `vicuna-7b-v1.5`, and `vicuna-13b-v1.5`. If you wish to integrate additional models that are [compatible with FastChat](https://github.com/lm-sys/FastChat/blob/main/docs/model_support.md), you need to:
+1. Add the new `MODEL_NAME` into the `LOCAL_LLMS` within `agentverse/llms/__init__.py`. Furthermore, establish
+2. Add the mapping from the new `MODEL_NAME` to its corresponding Huggingface identifier in the `LOCAL_LLMS_MAPPING` within the `agentverse/llms/__init__.py` file.
+
+### 3. Modify the Config File
+In your config file, set the `llm_type` to `local` and `model` to the `MODEL_NAME`. For example
+```yaml
+llm:
+  llm_type: local
+  model: llama-2-7b-chat-hf
+  ...
+```
+
+You can refer to `agentverse/tasks/tasksolving/commongen/llama-2-7b-chat-hf/config.yaml` for a more detailed example.
+
+# AgentVerse Showcases
+
+## Simulation Showcases
+Refer to [simulation showcases](README_simulation_cases.md)
+
+## Task-Solving Showcases
+Refer to [tasksolving showcases](README_tasksolving_cases.md)
+
+
+
+<!--
 ## 💡 Philosophy
 
 ### Environment
@@ -254,6 +423,14 @@ By abstracting the environment into these five components, we have created a hig
 ### Agent
 
 Another fundamental component is the agent. Currently we provide two types of agents: **ConversationAgent** and **ToolAgent**. You can also customize your own agent by inheriting BaseAgent class (tutorial coming soon).
+
+-->
+
+
+
+
+
+<!--
 
 ## ✍️ Customize Your Own Environment
 
@@ -338,7 +515,10 @@ While we provide a basic framework for building environments with our five rule 
 2. **Customize the environment itself**. Our `basic` environment provides a default execution order for the five rule components that is suitable for most cases, but you can inherit the `BaseEnvironment` class and write your own `run` method to implement a more sophisticated execution order.
 3. **Customize the agent**. Depending on your specific use case, you may also need to inherit the `BaseAgent` class. For example, you may want to use your local LLM as your agents or create agents with specialized knowledge or skills.
 
+-->
 
+
+<!--
 
 ## 🔎 Examples
 
@@ -355,9 +535,54 @@ Here's a brief overview of each example:
 7. `db_diag`: The Chief DBA monitors (agents) the database system for anomalies and alerts memory and CPU agents if any are detected. They (agents) analyze root causes and suggest optimization solutions. The Chief DBA (agent) provides a diagnosis summary to the user, who can give instructions or evaluate the proposed solutions' effectiveness.
 8. `sde_team`: In the SDE team, code writer, code tester and code reviewer collaborate on the code generation problem. 
 9. `pokemon`:  This example intimates Pokemon game.
+-->
 
 
-## Star History
+# 🌟 Join Us!
+AgentVerse is on a mission to revolutionize the multi-agent environment for large language models, and we're eagerly looking for passionate collaborators to join us on this exciting journey.
+
+## Leaders
+<a href="https://github.com/chenweize1998"><img src="https://avatars.githubusercontent.com/u/32613237?v=4" alt="Leader" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/yushengsu-thu"><img src="https://avatars.githubusercontent.com/u/11704492?v=4" alt="Leader" style="width:5%; border-radius: 50%;"/></a>
+
+## Contributors
+<a href="https://github.com/chanchimin"><img src="https://avatars.githubusercontent.com/u/75533759?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/libowen2121"><img src="https://avatars.githubusercontent.com/u/19970308?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/Xial-kotori"><img src="https://avatars.githubusercontent.com/u/53430452?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/Dr-Left"><img src="https://avatars.githubusercontent.com/u/39025643?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/minleminzui"><img src="https://avatars.githubusercontent.com/u/54172054?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/Tsuruko04"><img src="https://avatars.githubusercontent.com/u/129145574?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/kierangilliam"><img src="https://avatars.githubusercontent.com/u/18583882?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/zhouxh19"><img src="https://avatars.githubusercontent.com/u/17394639?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/tzw2698"><img src="https://avatars.githubusercontent.com/u/68865752?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/JetSquirrel"><img src="https://avatars.githubusercontent.com/u/20291255?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/Muiruriscode"><img src="https://avatars.githubusercontent.com/u/85177347?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+<a href="https://github.com/eltociear"><img src="https://avatars.githubusercontent.com/u/22633385?v=4" alt="Contributor" style="width:5%; border-radius: 50%;"/></a>
+
+
+## How Can You Contribute?
+- **Issue and Pull-Request**: If you encounter any problems when use AgentVerse, you can propose the issue in English. Beisdes, you can also autonomously ask us to assign issue to you and send the PR (Please follow the [PULL_REQUEST_TEMPLATE](https://github.com/OpenBMB/AgentVerse/blob/main/PULL_REQUEST_TEMPLATE.md)) after you solve it. 
+  
+- **Code Development**: If you're an engineer, help us refine, optimize, and expand the current framework. We're always looking for talented developers to enhance our existing features and develop new modules.
+
+- **Documentation and Tutorials**: If you have a knack for writing, help us improve our documentation, create tutorials, or write blog posts to make AgentVerse more accessible to the broader community.
+
+- **Application Exploration**: If you're intrigued by multi-agent applications and are eager to experiment using AgentVerse, we'd be thrilled to support your journey and see what you create!
+
+- **Feedback and Suggestions**: Use AgentVerse and provide us with feedback. Your insights can lead to potential improvements and ensure that our framework remains top-notch.
+
+Also, if you're passionate about advancing the frontiers of multi-agent applications, become core AgentVerse team members, or are eager to dive deeper into agent research. Please reach out [AgentVerse Team](mailto:agentverse2@gmail.com?subject=[GitHub]%AgentVerse%20Project), and CC to [Weize Chen](mailto:chenweize1998@gmail.com?subject=[GitHub]%AgentVerse%20Project) and [Yusheng Su](mailto:yushengsu.thu@gmail.com?subject=[GitHub]%AgentVerse%20Project). We're keen to welcome motivated individuals like you to our team!
+
+
+## Social Media and Community
+
+- Twitter: https://twitter.com/Agentverse71134
+
+- Discord: https://discord.gg/gDAXfjMw.
+
+- Hugging Face: https://huggingface.co/spaces/AgentVerse/agentVerse.
+
+# Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=OpenBMB/AgentVerse&type=Date)](https://star-history.com/#OpenBMB/AgentVerse&Date)
 
@@ -365,19 +590,21 @@ Here's a brief overview of each example:
 ## Citation
 If you find this repo helpful, feel free to cite us.
 ```
-@misc{chen2023agentverse,
-      title={AgentVerse: Facilitating Multi-Agent Collaboration and Exploring Emergent Behaviors in Agents}, 
-      author={Weize Chen and Yusheng Su and Jingwei Zuo and Cheng Yang and Chenfei Yuan and Chen Qian and Chi-Min Chan and Yujia Qin and Yaxi Lu and Ruobing Xie and Zhiyuan Liu and Maosong Sun and Jie Zhou},
-      year={2023},
-      eprint={2308.10848},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@article{chen2023agentverse,
+  title={Agentverse: Facilitating multi-agent collaboration and exploring emergent behaviors in agents},
+  author={Chen, Weize and Su, Yusheng and Zuo, Jingwei and Yang, Cheng and Yuan, Chenfei and Qian, Chen and Chan, Chi-Min and Qin, Yujia and Lu, Yaxi and Xie, Ruobing and others},
+  journal={arXiv preprint arXiv:2308.10848},
+  year={2023}
 }
 ```
 
-## Contact
+# Contact
 
-Weize Chen: chenwz21@mails.tsinghua.edu.cn
+AgentVerse Team: agentverse2@gmail.com
 
-[Yusheng Su](https://yushengsu-thu.github.io/): yushengsu.thu@gmail.com
+Project leaders:
+
+- Weize Chen: chenweize1998@gmail.com
+
+- [Yusheng Su](https://yushengsu-thu.github.io/): yushengsu.thu@gmail.com
 

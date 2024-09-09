@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 import json
 
 from agentverse.agents.simulation_agent.conversation import BaseAgent
+from agentverse.logging import logger
 
 # from agentverse.environments.simulation_env.rules.base import Rule
 from agentverse.environments.simulation_env.rules.base import SimulationRule as Rule
@@ -12,7 +13,7 @@ from agentverse.message import Message
 from .. import env_registry as EnvironmentRegistry
 from ..base import BaseEnvironment
 
-# from agentverse.initialization import load_tools
+from agentverse.initialization import load_tools
 
 
 @EnvironmentRegistry.register("sde_team")
@@ -56,8 +57,18 @@ class SdeTeamEnvironment(BaseEnvironment):
         self.rule_params["end_flag"] = False
 
         # # Test code
-        # self.rule_params["name_to_tools"] = {tool.name: tool for tool in load_tools([{"tool_name": "code_interpreter", "tool_url" : "http://127.0.0.1:8079/tools/code_interpreter/"}])}
-        # tool = self.rule_params["name_to_tools"]["execute_unit_tests"]
+        self.rule_params["name_to_tools"] = {
+            tool.name: tool
+            for tool in load_tools(
+                [
+                    {
+                        "tool_name": "code_interpreter",
+                        "tool_url": "http://127.0.0.1:8079/tools/code_interpreter/",
+                    }
+                ]
+            )
+        }
+        tool = self.rule_params["name_to_tools"]["execute_unit_tests"]
         # print(type(tool))
 
         # d = {
@@ -106,7 +117,7 @@ class SdeTeamEnvironment(BaseEnvironment):
     def print_messages(self, messages: List[Message]) -> None:
         for message in messages:
             if message is not None:
-                logging.info(f"{message.sender}: {message.content}")
+                logger.info(f"{message.sender}: {message.content}")
 
     def reset(self) -> None:
         """Reset the environment"""

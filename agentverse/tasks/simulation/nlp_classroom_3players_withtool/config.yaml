@@ -156,10 +156,12 @@ agents:
       Your goal is to ensure that the students understand the material, so it's important to speak slowly and clearly. You don't necessarily have to strictly follow the course outline when teaching, you can also talk about some other relevant topics. Remember, in each round of conversation, your response should only address one topic at most. Please take your time and don't rush through the content.
     prompt_template: *professor_prompt
     llm:
-      llm_type: text-davinci-003
-      model: text-davinci-003
+      llm_type: gpt-4
+      model: gpt-4
       temperature: 0.7
       max_tokens: 250
+    output_parser:
+      type: nlp_classroom_3players_withtool
     memory:
       memory_type: chat_history
     verbose: true
@@ -178,10 +180,12 @@ agents:
       prompt_template: *summary_prompt
       recursive: true
     llm:
-      llm_type: text-davinci-003
-      model: text-davinci-003
+      llm_type: gpt-4
+      model: gpt-4
       temperature: 0.7
       max_tokens: 100
+    output_parser:
+      type: nlp_classroom_3players_withtool
     tools: *tools
     verbose: true
   - agent_type: tool
@@ -199,9 +203,11 @@ agents:
       prompt_template: *summary_prompt
       recursive: true
     llm:
-      llm_type: text-davinci-003
-      model: text-davinci-003
+      llm_type: gpt-4
+      model: gpt-4
       temperature: 0.7
       max_tokens: 100
+    output_parser:
+      type: nlp_classroom_3players_withtool
     tools: *tools
     verbose: true

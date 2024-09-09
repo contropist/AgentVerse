@@ -2,11 +2,11 @@ pyyaml
 fastapi==0.95.1
 uvicorn
 py3langid
-iso-639
-openai==0.27.8
+setuptools-scm
+openai==1.1.0
 opencv-python==4.8.0.76
 gradio
-httpx[socks]
+httpx[socks]==0.25.0
 astunparse
 langchain==0.0.157
 scikit-learn
@@ -16,3 +16,5 @@ typing-inspect==0.8.0
 colorlog
 rapidfuzz
 spacy
+colorama==0.4.6
+tiktoken==0.5.1

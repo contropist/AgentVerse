@@ -1,3 +1,4 @@
+import os
 import base64
 import itertools
 import json
@@ -9,6 +10,8 @@ import gradio as gr
 from agentverse import TaskSolving
 from agentverse.simulation import Simulation
 from agentverse.message import Message
+
+IMG_PATH = os.path.join(os.path.dirname(__file__), "..", "imgs")
 
 
 def cover_img(background, img, place: Tuple[int, int]):
@@ -30,17 +33,18 @@ class GUI:
     the UI of frontend
     """
 
-    def __init__(self, task: str):
+    def __init__(self, task: str, tasks_dir: str, ui_kwargs: Dict[str, str]):
         """
         init a UI.
         default number of students is 0
         """
         self.messages = []
         self.task = task
-        if task == "pipeline_brainstorming":
-            self.backend = TaskSolving.from_task(task)
+        self.ui_kwargs = ui_kwargs
+        if task == "tasksolving/brainstorming":
+            self.backend = TaskSolving.from_task(task, tasks_dir)
         else:
-            self.backend = Simulation.from_task(task)
+            self.backend = Simulation.from_task(task, tasks_dir)
         self.turns_remain = 0
         self.agent_id = {
             self.backend.agents[idx].name: idx
@@ -55,15 +59,15 @@ class GUI:
 
     def get_avatar(self, idx):
         if idx == -1:
-            img = cv2.imread("./imgs/db_diag/-1.png")
-        elif self.task == "prisoner_dilemma":
-            img = cv2.imread(f"./imgs/prison/{idx}.png")
-        elif self.task == "db_diag":
-            img = cv2.imread(f"./imgs/db_diag/{idx}.png")
+            img = cv2.imread(f"{IMG_PATH}/db_diag/-1.png")
+        elif self.task == "simulation/prisoner_dilemma":
+            img = cv2.imread(f"{IMG_PATH}/prison/{idx}.png")
+        elif self.task == "simulation/db_diag":
+            img = cv2.imread(f"{IMG_PATH}/db_diag/{idx}.png")
         elif "sde" in self.task:
-            img = cv2.imread(f"./imgs/sde/{idx}.png")
+            img = cv2.imread(f"{IMG_PATH}/sde/{idx}.png")
         else:
-            img = cv2.imread(f"./imgs/{idx}.png")
+            img = cv2.imread(f"{IMG_PATH}/{idx}.png")
         base64_str = cv2.imencode(".png", img)[1].tostring()
         return "data:image/png;base64," + base64.b64encode(base64_str).decode("utf-8")
 
@@ -93,11 +97,15 @@ class GUI:
 
             yield (
                 *outputs,
-                gr.Button.update(interactive=not self.autoplay and self.turns_remain > 0),
+                gr.Button.update(
+                    interactive=not self.autoplay and self.turns_remain > 0
+                ),
                 gr.Button.update(interactive=self.autoplay and self.turns_remain > 0),
-                gr.Button.update(interactive=not self.autoplay and self.turns_remain > 0),
+                gr.Button.update(
+                    interactive=not self.autoplay and self.turns_remain > 0
+                ),
                 *[gr.Button.update(visible=statu) for statu in self.solution_status],
-                gr.Box.update(visible=any(self.solution_status))
+                gr.Box.update(visible=any(self.solution_status)),
             )
 
     def delay_gen_output(self):
@@ -107,7 +115,7 @@ class GUI:
             gr.Button.update(interactive=False),
             gr.Button.update(interactive=False),
             *[gr.Button.update(visible=statu) for statu in self.solution_status],
-            gr.Box.update(visible=any(self.solution_status))
+            gr.Box.update(visible=any(self.solution_status)),
         )
 
         outputs = self.gen_output()
@@ -119,7 +127,7 @@ class GUI:
             gr.Button.update(interactive=self.turns_remain > 0),
             gr.Button.update(interactive=self.turns_remain > 0),
             *[gr.Button.update(visible=statu) for statu in self.solution_status],
-            gr.Box.update(visible=any(self.solution_status))
+            gr.Box.update(visible=any(self.solution_status)),
         )
 
     def delay_reset(self):
@@ -132,7 +140,7 @@ class GUI:
             gr.Button.update(interactive=False),
             gr.Button.update(interactive=True),
             *[gr.Button.update(visible=statu) for statu in self.solution_status],
-            gr.Box.update(visible=any(self.solution_status))
+            gr.Box.update(visible=any(self.solution_status)),
         )
 
     def reset(self, stu_num=0):
@@ -156,22 +164,22 @@ class GUI:
         self.backend.reset()
         self.turns_remain = self.backend.environment.max_turns
 
-        if self.task == "prisoner_dilemma":
-            background = cv2.imread("./imgs/prison/case_1.png")
-        elif self.task == "db_diag":
-            background = cv2.imread("./imgs/db_diag/background.png")
+        if self.task == "simulation/prisoner_dilemma":
+            background = cv2.imread(f"{IMG_PATH}/prison/case_1.png")
+        elif self.task == "simulation/db_diag":
+            background = cv2.imread(f"{IMG_PATH}/db_diag/background.png")
         elif "sde" in self.task:
-            background = cv2.imread("./imgs/sde/background.png")
+            background = cv2.imread(f"{IMG_PATH}/sde/background.png")
         else:
-            background = cv2.imread("./imgs/background.png")
+            background = cv2.imread(f"{IMG_PATH}/background.png")
             back_h, back_w, _ = background.shape
             stu_cnt = 0
             for h_begin, w_begin in itertools.product(
-                    range(800, back_h, 300), range(135, back_w - 200, 200)
+                range(800, back_h, 300), range(135, back_w - 200, 200)
             ):
                 stu_cnt += 1
                 img = cv2.imread(
-                    f"./imgs/{(stu_cnt - 1) % 11 + 1 if stu_cnt <= self.stu_num else 'empty'}.png",
+                    f"{IMG_PATH}/{(stu_cnt - 1) % 11 + 1 if stu_cnt <= self.stu_num else 'empty'}.png",
                     cv2.IMREAD_UNCHANGED,
                 )
                 cover_img(
@@ -193,27 +201,27 @@ class GUI:
         # if len(data) != self.stu_num:
         if len(data) != self.stu_num + 1:
             raise gr.Error("data length is not equal to the total number of students.")
-        if self.task == "prisoner_dilemma":
-            img = cv2.imread("./imgs/speaking.png", cv2.IMREAD_UNCHANGED)
+        if self.task == "simulation/prisoner_dilemma":
+            img = cv2.imread(f"{IMG_PATH}/speaking.png", cv2.IMREAD_UNCHANGED)
             if (
-                    len(self.messages) < 2
-                    or self.messages[-1][0] == 1
-                    or self.messages[-2][0] == 2
+                len(self.messages) < 2
+                or self.messages[-1][0] == 1
+                or self.messages[-2][0] == 2
             ):
-                background = cv2.imread("./imgs/prison/case_1.png")
+                background = cv2.imread(f"{IMG_PATH}/prison/case_1.png")
                 if data[0]["message"] != "":
                     cover_img(background, img, (400, 480))
             else:
-                background = cv2.imread("./imgs/prison/case_2.png")
+                background = cv2.imread(f"{IMG_PATH}/prison/case_2.png")
                 if data[0]["message"] != "":
                     cover_img(background, img, (400, 880))
             if data[1]["message"] != "":
                 cover_img(background, img, (550, 480))
             if data[2]["message"] != "":
                 cover_img(background, img, (550, 880))
-        elif self.task == "db_diag":
-            background = cv2.imread("./imgs/db_diag/background.png")
-            img = cv2.imread("./imgs/db_diag/speaking.png", cv2.IMREAD_UNCHANGED)
+        elif self.task == "simulation/db_diag":
+            background = cv2.imread(f"{IMG_PATH}/db_diag/background.png")
+            img = cv2.imread(f"{IMG_PATH}/db_diag/speaking.png", cv2.IMREAD_UNCHANGED)
             if data[0]["message"] != "":
                 cover_img(background, img, (750, 80))
             if data[1]["message"] != "":
@@ -221,8 +229,8 @@ class GUI:
             if data[2]["message"] != "":
                 cover_img(background, img, (522, 11))
         elif "sde" in self.task:
-            background = cv2.imread("./imgs/sde/background.png")
-            img = cv2.imread("./imgs/sde/speaking.png", cv2.IMREAD_UNCHANGED)
+            background = cv2.imread(f"{IMG_PATH}/sde/background.png")
+            img = cv2.imread(f"{IMG_PATH}/sde/speaking.png", cv2.IMREAD_UNCHANGED)
             if data[0]["message"] != "":
                 cover_img(background, img, (692, 330))
             if data[1]["message"] != "":
@@ -230,19 +238,19 @@ class GUI:
             if data[2]["message"] != "":
                 cover_img(background, img, (692, 990))
         else:
-            background = cv2.imread("./imgs/background.png")
+            background = cv2.imread(f"{IMG_PATH}/background.png")
             back_h, back_w, _ = background.shape
             stu_cnt = 0
             if data[stu_cnt]["message"] not in ["", "[RaiseHand]"]:
-                img = cv2.imread("./imgs/speaking.png", cv2.IMREAD_UNCHANGED)
+                img = cv2.imread(f"{IMG_PATH}/speaking.png", cv2.IMREAD_UNCHANGED)
                 cover_img(background, img, (370, 1250))
             for h_begin, w_begin in itertools.product(
-                    range(800, back_h, 300), range(135, back_w - 200, 200)
+                range(800, back_h, 300), range(135, back_w - 200, 200)
             ):
                 stu_cnt += 1
                 if stu_cnt <= self.stu_num:
                     img = cv2.imread(
-                        f"./imgs/{(stu_cnt - 1) % 11 + 1}.png", cv2.IMREAD_UNCHANGED
+                        f"{IMG_PATH}/{(stu_cnt - 1) % 11 + 1}.png", cv2.IMREAD_UNCHANGED
                     )
                     cover_img(
                         background,
@@ -251,14 +259,16 @@ class GUI:
                     )
                     if "[RaiseHand]" in data[stu_cnt]["message"]:
                         # elif data[stu_cnt]["message"] == "[RaiseHand]":
-                        img = cv2.imread("./imgs/hand.png", cv2.IMREAD_UNCHANGED)
+                        img = cv2.imread(f"{IMG_PATH}/hand.png", cv2.IMREAD_UNCHANGED)
                         cover_img(background, img, (h_begin - 90, w_begin + 10))
                     elif data[stu_cnt]["message"] not in ["", "[RaiseHand]"]:
-                        img = cv2.imread("./imgs/speaking.png", cv2.IMREAD_UNCHANGED)
+                        img = cv2.imread(
+                            f"{IMG_PATH}/speaking.png", cv2.IMREAD_UNCHANGED
+                        )
                         cover_img(background, img, (h_begin - 90, w_begin + 10))
 
                 else:
-                    img = cv2.imread("./imgs/empty.png", cv2.IMREAD_UNCHANGED)
+                    img = cv2.imread(f"{IMG_PATH}/empty.png", cv2.IMREAD_UNCHANGED)
                     cover_img(background, img, (h_begin, w_begin))
         return cv2.cvtColor(background, cv2.COLOR_BGR2RGB)
 
@@ -266,21 +276,27 @@ class GUI:
         _format = [{"message": "", "sender": idx} for idx in range(len(self.agent_id))]
 
         for message in messages:
-            if self.task == "db_diag":
+            if self.task == "simulation/db_diag":
                 content_json: dict = message.content
-                content_json["diagnose"] = f"[{message.sender}]: {content_json['diagnose']}"
-                _format[self.agent_id[message.sender]]["message"] = json.dumps(content_json)
+                content_json[
+                    "diagnose"
+                ] = f"[{message.sender}]: {content_json['diagnose']}"
+                _format[self.agent_id[message.sender]]["message"] = json.dumps(
+                    content_json
+                )
             elif "sde" in self.task:
                 if message.sender == "code_tester":
                     pre_message, message_ = message.content.split("\n")
-                    message_ = "{}\n{}".format(pre_message, json.loads(message_)["feedback"])
-                    _format[self.agent_id[message.sender]]["message"] = "[{}]: {}".format(
-                        message.sender, message_
+                    message_ = "{}\n{}".format(
+                        pre_message, json.loads(message_)["feedback"]
                     )
+                    _format[self.agent_id[message.sender]][
+                        "message"
+                    ] = "[{}]: {}".format(message.sender, message_)
                 else:
-                    _format[self.agent_id[message.sender]]["message"] = "[{}]: {}".format(
-                        message.sender, message.content
-                    )
+                    _format[self.agent_id[message.sender]][
+                        "message"
+                    ] = "[{}]: {}".format(message.sender, message.content)
 
             else:
                 _format[self.agent_id[message.sender]]["message"] = "[{}]: {}".format(
@@ -328,7 +344,7 @@ class GUI:
                 avatar = self.get_avatar(-1)
             else:
                 avatar = self.get_avatar((sender - 1) % 11 + 1)
-            if self.task == "db_diag":
+            if self.task == "simulation/db_diag":
                 msg_json = json.loads(msg)
                 self.solution_status = [False] * self.tot_solutions
                 msg = msg_json["diagnose"]
@@ -337,23 +353,44 @@ class GUI:
                     for solu in solution:
                         if "query" in solu or "queries" in solu:
                             self.solution_status[0] = True
-                            solu = solu.replace("query", '<span style="color:yellow;">query</span>')
-                            solu = solu.replace("queries", '<span style="color:yellow;">queries</span>')
+                            solu = solu.replace(
+                                "query", '<span style="color:yellow;">query</span>'
+                            )
+                            solu = solu.replace(
+                                "queries", '<span style="color:yellow;">queries</span>'
+                            )
                         if "join" in solu:
                             self.solution_status[1] = True
-                            solu = solu.replace("join", '<span style="color:yellow;">join</span>')
+                            solu = solu.replace(
+                                "join", '<span style="color:yellow;">join</span>'
+                            )
                         if "index" in solu:
                             self.solution_status[2] = True
-                            solu = solu.replace("index", '<span style="color:yellow;">index</span>')
+                            solu = solu.replace(
+                                "index", '<span style="color:yellow;">index</span>'
+                            )
                         if "system configuration" in solu:
                             self.solution_status[3] = True
-                            solu = solu.replace("system configuration",
-                                                '<span style="color:yellow;">system configuration</span>')
-                        if "monitor" in solu or "Monitor" in solu or "Investigate" in solu:
+                            solu = solu.replace(
+                                "system configuration",
+                                '<span style="color:yellow;">system configuration</span>',
+                            )
+                        if (
+                            "monitor" in solu
+                            or "Monitor" in solu
+                            or "Investigate" in solu
+                        ):
                             self.solution_status[4] = True
-                            solu = solu.replace("monitor", '<span style="color:yellow;">monitor</span>')
-                            solu = solu.replace("Monitor", '<span style="color:yellow;">Monitor</span>')
-                            solu = solu.replace("Investigate", '<span style="color:yellow;">Investigate</span>')
+                            solu = solu.replace(
+                                "monitor", '<span style="color:yellow;">monitor</span>'
+                            )
+                            solu = solu.replace(
+                                "Monitor", '<span style="color:yellow;">Monitor</span>'
+                            )
+                            solu = solu.replace(
+                                "Investigate",
+                                '<span style="color:yellow;">Investigate</span>',
+                            )
                         msg = f"{msg}<br>{solu}"
                 if msg_json["knowledge"] != "":
                     msg = f'{msg}<hr style="margin: 5px 0"><span style="font-style: italic">{msg_json["knowledge"]}<span>'
@@ -361,14 +398,18 @@ class GUI:
                 msg = msg.replace("<", "&lt;")
                 msg = msg.replace(">", "&gt;")
             message = (
-                    f'<div style="display: flex; align-items: center; margin-bottom: 10px;overflow:auto;">'
-                    f'<img src="{avatar}" style="width: 5%; height: 5%; border-radius: 25px; margin-right: 10px;">'
-                    f'<div style="background-color: gray; color: white; padding: 10px; border-radius: 10px;'
-                    f'max-width: 70%; white-space: pre-wrap">'
-                    f"{msg}"
-                    f"</div></div>" + message
+                f'<div style="display: flex; align-items: center; margin-bottom: 10px;overflow:auto;">'
+                f'<img src="{avatar}" style="width: 5%; height: 5%; border-radius: 25px; margin-right: 10px;">'
+                f'<div style="background-color: gray; color: white; padding: 10px; border-radius: 10px;'
+                f'max-width: 70%; white-space: pre-wrap">'
+                f"{msg}"
+                f"</div></div>" + message
             )
-        message = '<div id="divDetail" style="height:600px;overflow:auto;">' + message + "</div>"
+        message = (
+            '<div id="divDetail" style="height:600px;overflow:auto;">'
+            + message
+            + "</div>"
+        )
         return message
 
     def submit(self, message: str):
@@ -382,7 +423,7 @@ class GUI:
         return self.gen_img([{"message": ""}] * len(self.agent_id)), self.gen_message()
 
     def launch(self, single_agent=False, discussion_mode=False):
-        if self.task == "pipeline_brainstorming":
+        if self.task == "tasksolving/brainstorming":
             with gr.Blocks() as demo:
                 chatbot = gr.Chatbot(height=800, show_label=False)
                 msg = gr.Textbox(label="Input")
@@ -390,7 +431,9 @@ class GUI:
                 def respond(message, chat_history):
                     chat_history.append((message, None))
                     yield "", chat_history
-                    for response in self.backend.iter_run(single_agent=single_agent, discussion_mode=discussion_mode):
+                    for response in self.backend.iter_run(
+                        single_agent=single_agent, discussion_mode=discussion_mode
+                    ):
                         print(response)
                         chat_history.append((None, response))
                         yield "", chat_history
@@ -408,16 +451,28 @@ class GUI:
                             stop_autoplay_btn = gr.Button(
                                 "Stop Autoplay", interactive=False
                             )
-                            start_autoplay_btn = gr.Button("Start Autoplay", interactive=False)
+                            start_autoplay_btn = gr.Button(
+                                "Start Autoplay", interactive=False
+                            )
                         with gr.Box(visible=False) as solutions:
                             with gr.Column():
                                 gr.HTML("Optimization Solutions:")
                                 with gr.Row():
-                                    rewrite_slow_query_btn = gr.Button("Rewrite Slow Query", visible=False)
-                                    add_query_hints_btn = gr.Button("Add Query Hints", visible=False)
-                                    update_indexes_btn = gr.Button("Update Indexes", visible=False)
-                                    tune_parameters_btn = gr.Button("Tune Parameters", visible=False)
-                                    gather_more_info_btn = gr.Button("Gather More Info", visible=False)
+                                    rewrite_slow_query_btn = gr.Button(
+                                        "Rewrite Slow Query", visible=False
+                                    )
+                                    add_query_hints_btn = gr.Button(
+                                        "Add Query Hints", visible=False
+                                    )
+                                    update_indexes_btn = gr.Button(
+                                        "Update Indexes", visible=False
+                                    )
+                                    tune_parameters_btn = gr.Button(
+                                        "Tune Parameters", visible=False
+                                    )
+                                    gather_more_info_btn = gr.Button(
+                                        "Gather More Info", visible=False
+                                    )
                     # text_output = gr.Textbox()
                     text_output = gr.HTML(self.reset()[1])
 
@@ -425,12 +480,16 @@ class GUI:
                 # stu_num = gr.Number(label="Student Number", precision=0)
                 # stu_num = self.stu_num
 
-                if self.task == "db_diag":
+                if self.task == "simulation/db_diag":
                     user_msg = gr.Textbox()
                     submit_btn = gr.Button("Submit", variant="primary")
 
-                    submit_btn.click(fn=self.submit, inputs=user_msg, outputs=[image_output, text_output],
-                                     show_progress=False)
+                    submit_btn.click(
+                        fn=self.submit,
+                        inputs=user_msg,
+                        outputs=[image_output, text_output],
+                        show_progress=False,
+                    )
                 else:
                     pass
 
@@ -449,7 +508,7 @@ class GUI:
                         update_indexes_btn,
                         tune_parameters_btn,
                         gather_more_info_btn,
-                        solutions
+                        solutions,
                     ],
                     show_progress=False,
                 )
@@ -472,7 +531,7 @@ class GUI:
                         update_indexes_btn,
                         tune_parameters_btn,
                         gather_more_info_btn,
-                        solutions
+                        solutions,
                     ],
                     show_progress=False,
                 )
@@ -497,10 +556,10 @@ class GUI:
                         update_indexes_btn,
                         tune_parameters_btn,
                         gather_more_info_btn,
-                        solutions
+                        solutions,
                     ],
                     show_progress=False,
                 )
 
-        demo.queue(concurrency_count=5, max_size=20).launch()
+        demo.queue(concurrency_count=5, max_size=20).launch(**self.ui_kwargs)
         # demo.launch()

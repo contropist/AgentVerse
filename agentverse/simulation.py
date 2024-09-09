@@ -17,13 +17,13 @@ class Simulation:
         self.environment = environment
 
     @classmethod
-    def from_task(cls, task: str):
+    def from_task(cls, task: str, tasks_dir: str):
         """Build an AgentVerse from a task name.
         The task name should correspond to a directory in `tasks` directory.
         Then this method will load the configuration from the yaml file in that directory.
         """
         # Prepare the config of the task
-        task_config = prepare_task_config(task)
+        task_config = prepare_task_config(task, tasks_dir)
 
         # Build the agents
         agents = []
@@ -43,6 +43,7 @@ class Simulation:
         self.environment.reset()
         while not self.environment.is_done():
             asyncio.run(self.environment.step())
+        self.environment.report_metrics()
 
     def reset(self):
         self.environment.reset()

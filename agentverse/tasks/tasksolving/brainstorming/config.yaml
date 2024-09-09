@@ -17,7 +17,7 @@ prompts:
     What experts will you recruit to better generate good ideas?
     
     Output format example:
-    1. an electrical engineer specified in the filed of xxx
+    1. an electrical engineer specified in the field of xxx
     2. an economist who is good at xxx
     3. a lawyer with a good knowledge of xxx
     ...
@@ -101,16 +101,17 @@ name: pipeline
 environment:
   env_type: task-basic
   max_turn: *max_turn
-  role_assigner:
-    type: role_description
-    cnt_agents: *cnt_agents
-  decision_maker:
-    type: brainstorming
-    max_inner_turns: *max_inner_turns
-  executor:
-    type: none
-  evaluator:
-    type: basic
+  rule:
+    role_assigner:
+      type: role_description
+      cnt_agents: *cnt_agents
+    decision_maker:
+      type: brainstorming
+      max_inner_turns: *max_inner_turns
+    executor:
+      type: none
+    evaluator:
+      type: basic
 
 agents:
   - #role_assigner_agent:
